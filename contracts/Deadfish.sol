@@ -25,6 +25,8 @@ contract Deadfish {
         require(instructions.length > 1, "No instructions");
         require(instructions.length < instructionLimit, "Too many instructions");
 
+        instances[msg.sender].accumulator = 0;
+        delete instances[msg.sender].plops;
 
         for (uint256 i = 0; i < instructions.length; i++) {
             if (parse(instructions[i]) == parse("i")) {
@@ -53,5 +55,9 @@ contract Deadfish {
 
     function parse(string memory instruction) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(instruction));
+    }
+
+    function getPlops() public view returns (int256[] memory) {
+        return instances[msg.sender].plops;
     }
 }
