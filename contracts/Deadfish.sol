@@ -12,7 +12,7 @@ pragma solidity ^0.8.0;
 /// @title A Deadfish interpreter in Solidity
 /// @dev Will possibly optimize
 contract Deadfish {
-    uint256 public instructionLimit = 500;
+    uint256 internal constant instructionLimit = 500;
 
     struct instance {
         int256 accumulator;
