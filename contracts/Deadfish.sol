@@ -28,6 +28,7 @@ contract Deadfish {
         delete instances[msg.sender].plops;
 
         int256 current_accumulator = instances[msg.sender].accumulator;
+
         for (uint256 i = 0; i < instructions.length; ++i) {
             if (parse(instructions[i]) == parse("i")) {
                current_accumulator += 1;
@@ -53,7 +54,7 @@ contract Deadfish {
         return (instances[msg.sender].plops);
     }
 
-    function parse(string memory instruction) public pure returns (bytes32) {
+    function parse(string memory instruction) internal pure returns (bytes32) {
         return keccak256(abi.encodePacked(instruction));
     }
 
