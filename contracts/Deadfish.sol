@@ -28,25 +28,26 @@ contract Deadfish {
         instances[msg.sender].accumulator = 0;
         delete instances[msg.sender].plops;
 
-        for (uint256 i = 0; i < instructions.length; i++) {
+        int256 current_accumulator = instances[msg.sender].accumulator;
+        for (uint256 i = 0; i < instructions.length; ++i) {
             if (parse(instructions[i]) == parse("i")) {
-               instances[msg.sender].accumulator += 1;
+               current_accumulator += 1;
             }
 
             if (parse(instructions[i]) == parse("d")) {
-                instances[msg.sender].accumulator -= 1;
+                current_accumulator -= 1;
             }
 
             if (parse(instructions[i]) == parse("s")) {
-                instances[msg.sender].accumulator = instances[msg.sender].accumulator ** 2;
+                current_accumulator = current_accumulator ** 2;
             }
 
             if (parse(instructions[i]) == parse("o")) {
-                instances[msg.sender].plops.push(instances[msg.sender].accumulator);
+                instances[msg.sender].plops.push(current_accumulator);
             }
 
-            if (instances[msg.sender].accumulator == 256 || instances[msg.sender].accumulator == -1) {
-                instances[msg.sender].accumulator = 0;
+            if (current_accumulator == 256 || current_accumulator == -1) {
+                current_accumulator = 0;
             }
         }
 
