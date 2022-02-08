@@ -21,7 +21,7 @@ contract Deadfish {
 
     mapping(address => instance) public instances;
 
-    function instruct(string[] memory instructions) public returns (int256[] memory) {
+    function instruct(uint256[] memory instructions) public returns (int256[] memory) {
         require(instructions.length > 1, "No instructions");
         require(instructions.length < instructionLimit, "Too many instructions");
 
@@ -30,19 +30,19 @@ contract Deadfish {
         int256 current_accumulator = instances[msg.sender].accumulator;
 
         for (uint256 i = 0; i < instructions.length; ++i) {
-            if (parse(instructions[i]) == parse("i")) {
-               current_accumulator += 1;
+            if (instructions[i] == 0x69) {
+                current_accumulator += 1;
             }
 
-            if (parse(instructions[i]) == parse("d")) {
+            if (instructions[i] == 0x64) {
                 current_accumulator -= 1;
             }
 
-            if (parse(instructions[i]) == parse("s")) {
+            if (instructions[i] == 0x73) {
                 current_accumulator = current_accumulator ** 2;
             }
 
-            if (parse(instructions[i]) == parse("o")) {
+            if (instructions[i] == 0x6F) {
                 instances[msg.sender].plops.push(current_accumulator);
             }
 
@@ -51,11 +51,7 @@ contract Deadfish {
             }
         }
 
-        return (instances[msg.sender].plops);
-    }
-
-    function parse(string memory instruction) internal pure returns (bytes32) {
-        return keccak256(abi.encodePacked(instruction));
+        return instances[msg.sender].plops;
     }
 
     function getPlops() public view returns (int256[] memory) {

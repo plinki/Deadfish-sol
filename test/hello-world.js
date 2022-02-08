@@ -2,19 +2,31 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Deadfish", function () {
-  it("Run Deadfish commands", async function () {
+    let deadfish;
+
+ before(async function () {
     const Deadfish = await ethers.getContractFactory("Deadfish");
-    const deadfish = await Deadfish.deploy();
+    deadfish = await Deadfish.deploy();
     await deadfish.deployed();
+ });
+  it("Deadfish hello world", async function () {
 
     cmdArray = []
-    commands = "iisiiiisiiiiiiiioiiiiiiiiiiiiiiiiiiiiiiiiiiiiioiiiiiiiooiiiodddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddodddddddddddddddddddddsddoddddddddoiiioddddddoddddddddo" // hello world
+    hello_world = "iisiiiisiiiiiiiioiiiiiiiiiiiiiiiiiiiiiiiiiiiiioiiiiiiiooiiiodddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddodddddddddddddddddddddsddoddddddddoiiioddddddoddddddddo";
 
-    // commands = "iissso";
-    for (let c of commands) {
-        cmdArray.push(c);
+    for (let command of hello_world) {
+        cmdArray.push(`0x${new Buffer.from(command).toString('hex')}`);
     }
 
-    console.log(await deadfish.callStatic.instruct(cmdArray));
+    // gas reporter
+    expect(await deadfish.instruct(cmdArray));
+
+    const result = await deadfish.getPlops();
+    let word;
+    for (let code of result) {
+        word += String.fromCharCode(code);
+    }
+
+    console.log(word);
   });
 });
