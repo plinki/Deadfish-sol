@@ -25,7 +25,6 @@ contract Deadfish {
         require(instructions.length > 1, "No instructions");
         require(instructions.length < instructionLimit, "Too many instructions");
 
-        instances[msg.sender].accumulator = 0;
         delete instances[msg.sender].plops;
 
         int256 current_accumulator = instances[msg.sender].accumulator;
