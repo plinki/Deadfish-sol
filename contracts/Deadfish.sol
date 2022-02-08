@@ -12,18 +12,16 @@ pragma solidity ^0.8.0;
 /// @title A Deadfish interpreter in Solidity
 /// @dev Will possibly optimize
 contract Deadfish {
-    uint256 internal constant instructionLimit = 500;
 
-    struct instance {
+    struct Instance {
         int256 accumulator;
         int256[] plops;
     }
 
-    mapping(address => instance) public instances;
+    mapping(address => Instance) public instances;
 
     function instruct(uint256[] memory instructions) public returns (int256[] memory) {
         require(instructions.length > 1, "No instructions");
-        require(instructions.length < instructionLimit, "Too many instructions");
 
         delete instances[msg.sender].plops;
 
