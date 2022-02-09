@@ -13,19 +13,14 @@ pragma solidity ^0.8.0;
 /// @dev Will possibly optimize
 contract Deadfish {
 
-    struct Instance {
-        int256 accumulator;
-        int256[] plops;
-    }
+    mapping(address => int256[]) plops;
 
-    mapping(address => Instance) public instances;
-
-    function instruct(uint256[] memory instructions) public returns (int256[] memory) {
+    function instruct(uint256[] memory instructions) external returns (int256[] memory) {
         require(instructions.length > 1, "No instructions");
 
-        delete instances[msg.sender].plops;
+        delete plops[msg.sender];
 
-        int256 current_accumulator = instances[msg.sender].accumulator;
+        int256 current_accumulator = 0;
 
         for (uint256 i = 0; i < instructions.length; ++i) {
             if (instructions[i] == 0x69) {
@@ -41,7 +36,7 @@ contract Deadfish {
             }
 
             if (instructions[i] == 0x6F) {
-                instances[msg.sender].plops.push(current_accumulator);
+                plops[msg.sender].push(current_accumulator);
             }
 
             if (current_accumulator == 256 || current_accumulator == -1) {
@@ -49,10 +44,10 @@ contract Deadfish {
             }
         }
 
-        return instances[msg.sender].plops;
+        return plops[msg.sender];
     }
 
     function getPlops() public view returns (int256[] memory) {
-        return instances[msg.sender].plops;
+        return plops[msg.sender];
     }
 }
