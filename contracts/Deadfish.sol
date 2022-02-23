@@ -18,11 +18,13 @@ contract Deadfish {
 
     mapping(address => int256[]) plops;
 
+    constructor() payable {}
+
     function instruct(uint256[] calldata instructions) external returns (int256[] memory) {
         if (instructions.length < 1) revert NoInstructions();
         if (instructions.length > 200) revert TooManyInstructions();
-        delete plops[msg.sender];
 
+        delete plops[msg.sender];
         int256 current_accumulator = 0;
 
         unchecked {
